@@ -1,25 +1,40 @@
-//your JS code here. If required.
 const fontSize = document.getElementById('fontsize');
 const fontColor = document.getElementById('fontcolor');
-const strSize = getCookie("fontSize") || null;
-const strColor = getCookie("fontColor") || null;
-if(strColor)
-	fontColor.value = strColor;
-if(strSize)
-	fontSize.value = strSize;
-console.log(strColor,strSize)
-const button = document.querySelector("[type=submit]")
- button.onclick=()=>{
-	   const size = fontSize.value.trim();
+const button = document.querySelector("[type=submit]");
+
+// Read saved values from cookies
+const savedSize = getCookie("fontsize");
+const savedColor = getCookie("fontcolor");
+
+// If values exist, set them in the inputs and apply styles
+if (savedSize) {
+  fontSize.value = savedSize;
+  document.documentElement.style.setProperty('--fontsize', savedSize);
+}
+
+if (savedColor) {
+  fontColor.value = savedColor;
+  document.documentElement.style.setProperty('--fontcolor', savedColor);
+}
+
+button.onclick = (e) => {
+  e.preventDefault(); // Prevent page reload
+
+  const size = fontSize.value.trim();
   const color = fontColor.value.trim();
 
-	  if (size) {
-    document.cookie = `fontSize=${size}; path=/`;
+  if (size) {
+    document.cookie = `fontsize=${size}; path=/`;
+    document.documentElement.style.setProperty('--fontsize', size);
   }
+
   if (color) {
-    document.cookie = `fontColor=${color}; path=/`;
+    document.cookie = `fontcolor=${color}; path=/`;
+    document.documentElement.style.setProperty('--fontcolor', color);
   }
- }
+};
+
+// Helper function to read cookie by name
 function getCookie(name) {
   const cookies = document.cookie.split(';');
   for (let cookie of cookies) {
